@@ -11,9 +11,9 @@ export class StudentService {
         return this.students;
     }
 
-    getStudentById(studetId: string): FindStudentResponseDto{
+    getStudentById(studentId: string): FindStudentResponseDto{
         return this.students.find(student => {
-            student.id === studetId;
+            student.id === studentId;
         });
     }
 
@@ -31,16 +31,40 @@ export class StudentService {
 
         const updatesStudentList = this.students.map(student =>{
             if(student.id === studentId){
-                updateStudent={
+                updateStudent = {
                     id:studentId,
                     ...payload
                 }
+                return updateStudent;
             }else{
                 return student;
             }
         });
         this.students = updatesStudentList;
+        return updateStudent;
+    }
 
+    getStudentsTeacherById(teacherId: string): FindStudentResponseDto[]{
+        return this.students.filter(student => {
+            return student.teacher === teacherId;
+        });
+    }
+
+    updateStudentOfTeacher(teacherId: string, studentId: string): StudentResponseDto{
+        let updateStudent: StudentResponseDto;
+
+        const updatesStudentList = this.students.map(student =>{
+            if(student.id === studentId){
+                updateStudent = {
+                    ...student,
+                    teacher: teacherId
+                }
+                return updateStudent;
+            }else{
+                return student;
+            }
+        });
+        this.students = updatesStudentList;
         return updateStudent;
     }
 }
